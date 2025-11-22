@@ -3,6 +3,8 @@ name: CI / Scaladoc / Deploy
 on:
   push:
     branches: [ master ]
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
