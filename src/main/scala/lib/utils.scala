@@ -1,7 +1,11 @@
 package lib
 
+import java.text.Normalizer
 import scala.language.implicitConversions
 
+/**
+ * Implicits to inject into String and Char types
+ */
 object jpnImplicits {
 
   implicit class jpnStrOps(s: String) {
@@ -15,6 +19,14 @@ object jpnImplicits {
 
     def hasKanji: Boolean = {
       JapaneseUtils.containsKanji(s)
+    }
+
+    def hasDakuten: Boolean = {
+      JapaneseUtils.containsDakuten(s)
+    }
+
+    def hasHandakuten: Boolean = {
+      JapaneseUtils.containsHandakuten(s)
     }
 
     def wrapInSingleQuotes: String = {
@@ -39,14 +51,19 @@ object jpnImplicits {
       JapaneseUtils.isKanji(c)
     }
   }
+
+  implicit def strToLong(s: String): Long =
+    s.foldLeft(1L)((l, c) => l * c)
 }
 
+/**
+ * core library
+ */
 object JapaneseUtils {
 
-  import scala.util.matching._
   import scala.collection.immutable.HashMap
 
-  final val jpnUnicodeBounds: HashMap[String, Long] = HashMap(
+  private final val jpnUnicodeBounds: HashMap[String, Long] = HashMap(
     ("HIRAGANA_UPPER" -> 12447L),
     ("HIRAGANA_LOWER" -> 12352L),
     ("KATAKANA_UPPER" -> 12543L),
@@ -55,22 +72,22 @@ object JapaneseUtils {
     ("KANJI_LOWER"    -> 19968L)
   )
 
-  private final val str2Long: String => Long = (s: String) =>
-    s.foldLeft(1L)((l: Long, c: Char) => l * c)
+  import jpnImplicits._
 
-  val isCharHiragana: String => Boolean = (str: String) => {
-    val strAsLong: Long = this.str2Long(str)
+  private val isCharHiragana: String => Boolean = (str: String) => {
+    val strAsLong: Long = str
     (strAsLong >= jpnUnicodeBounds("HIRAGANA_LOWER")
     && strAsLong <= jpnUnicodeBounds("HIRAGANA_UPPER"))
   }
-  val isCharKatana: String => Boolean = (str: String) => {
-    val strAsLong = this.str2Long(str)
+
+  private val isCharKatana: String => Boolean = (str: String) => {
+    val strAsLong = str
     (strAsLong >= jpnUnicodeBounds("KATAKANA_LOWER")
     && strAsLong <= jpnUnicodeBounds("KATAKANA_UPPER"))
   }
 
-  val isCharKanji: String => Boolean = (str: String) => {
-    val strAsLong = this.str2Long(str)
+  private val isCharKanji: String => Boolean = (str: String) => {
+    val strAsLong = str
     (strAsLong >= jpnUnicodeBounds("KANJI_LOWER")
     && strAsLong <= jpnUnicodeBounds("KANJI_UPPER"))
   }
@@ -105,6 +122,17 @@ object JapaneseUtils {
     regex.matches(str)
   }
 
+  def containsDakuten(str: String): Boolean = {
+    KanaDiacritics.hasDakuten(str)
+  }
+
+  def containsHandakuten(str: String): Boolean = {
+    KanaDiacritics.hasHandakuten(str)
+  }
+
+  /**
+   * for handling simple punctuation
+   */
   object Punctuation {
 
     def replacePunctuation(str: String): String = {
@@ -118,9 +146,33 @@ object JapaneseUtils {
 
     }
 
-    val wrapInSingleQuotes = (s: String) => s.mkString("「", "", "」")
-    val wrapInDoubleQuotes = (s: String) => s.mkString("『", "", "』")
+    val wrapInSingleQuotes: String => String = (s: String) =>
+      s.mkString("「", "", "」")
+    val wrapInDoubleQuotes: String => String = (s: String) =>
+      s.mkString("『", "", "』")
 
+  }
+}
+
+/**
+ * object to detect dakuten and handakuten
+ */
+object KanaDiacritics {
+  private val Dakuten: Char    = '\u3099'
+  private val Handakuten: Char = '\u309A'
+
+  def hasDakuten(s: String): Boolean = {
+    val norm = Normalizer.normalize(s, Normalizer.Form.NFD)
+    norm.contains(Dakuten)
+  }
+
+  def hasHandakuten(s: String): Boolean = {
+    val norm = Normalizer.normalize(s, Normalizer.Form.NFD)
+    norm.contains(Handakuten)
+  }
+  def hasAny(s: String): Boolean = {
+    val norm = Normalizer.normalize(s, Normalizer.Form.NFD)
+    norm.exists(c => c == Dakuten || c == Handakuten)
   }
 
 }

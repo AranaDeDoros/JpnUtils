@@ -27,11 +27,11 @@ object Usage extends App {
   println('た' isKatakana) //false
   println('林'.isKanji)    //true
 
-  //misceallaneous methods
+  //miscellaneous methods
   val testStr = """"this is a test!? yes? it is sir.""""
-  val strWithReplacedPunctionation = JapaneseUtils.Punctuation
+  val strWithReplacedPunctuation = JapaneseUtils.Punctuation
     .replacePunctuation(testStr)
-  println(strWithReplacedPunctionation) //"this is a test！？ yes？ it is sir。"
+  println(strWithReplacedPunctuation) //"this is a test！？ yes？ it is sir。"
 
   //「wrap me in single quotes」 and 『wrap me in double quotes』
   println(
@@ -40,5 +40,11 @@ object Usage extends App {
   println(
     JapaneseUtils.Punctuation.wrapInDoubleQuotes("wrap me in double quotes")
   )
+
+  //2025 update　KanaDiacritics
+  //true
+  println("俺はテストだぞ".hasDakuten)
+  //true
+  println("いっぱいに静かがっぽい".hasHandakuten)
 
 }

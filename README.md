@@ -34,4 +34,10 @@ A micro library of functions to work with japanese strings.
     //「wrap me in single quotes」 and 『wrap me in double quotes』 respectively
     println(JapaneseUtils.Punctuation.wrapInSingleQuotes("wrap me in single quotes"))
     println(JapaneseUtils.Punctuation.wrapInDoubleQuotes("wrap me in double quotes"))
+
+    //2025 update　KanaDiacritics
+    //true
+    println("俺はテストだぞ".hasDakuten)
+    //true
+    println("いっぱいに静かがっぽい".hasHandakuten)
 ```
