@@ -39,6 +39,9 @@ jobs:
           key: sbt-${{ runner.os }}-${{ hashFiles('**/*.sbt') }}
           restore-keys: sbt-${{ runner.os }}-
 
+      - name: Test
+        run: sbt test
+
       - name: Generate Scaladoc
         run: sbt doc
 
