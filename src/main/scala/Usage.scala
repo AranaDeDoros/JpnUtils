@@ -1,7 +1,7 @@
 package main
 
 import scala.language.postfixOps
-import lib.JapaneseUtils
+import lib.{HalfWidthConverter, JapaneseUtils, Punctuation}
 import lib.jpnImplicits._
 
 object Usage extends App {
@@ -29,16 +29,15 @@ object Usage extends App {
 
   //miscellaneous methods
   val testStr = """"this is a test!? yes? it is sir.""""
-  val strWithReplacedPunctuation = JapaneseUtils.Punctuation
-    .replacePunctuation(testStr)
+  val strWithReplacedPunctuation = Punctuation.replacePunctuation(testStr)
   println(strWithReplacedPunctuation) //"this is a test！？ yes？ it is sir。"
 
   //「wrap me in single quotes」 and 『wrap me in double quotes』
   println(
-    JapaneseUtils.Punctuation.wrapInSingleQuotes("wrap me in single quotes")
+    Punctuation.wrapInSingleQuotes("wrap me in single quotes")
   )
   println(
-    JapaneseUtils.Punctuation.wrapInDoubleQuotes("wrap me in double quotes")
+    Punctuation.wrapInDoubleQuotes("wrap me in double quotes")
   )
 
   //2025 update　KanaDiacritics
@@ -46,5 +45,15 @@ object Usage extends App {
   println("俺はテストだぞ".hasDakuten)
   //true
   println("いっぱいに静かがっぽい".hasHandakuten)
+
+  val s = "カタカナ　ＡＢＣ１２３＆％"
+  println(HalfWidthConverter.toHalfWidth(s))
+
+  "test".foreach{println}
+  ("test").flatMap{e => {
+    println(e)
+    s"$e"}
+  }
+
 
 }

@@ -1,5 +1,5 @@
 
-import lib.JapaneseUtils
+import lib.{JapaneseUtils, Punctuation}
 import lib.jpnImplicits._
 import munit.ScalaCheckSuite
 import org.scalacheck.Gen
@@ -36,18 +36,18 @@ class JapaneseUtilsTest extends ScalaCheckSuite {
 
   test("replace punctuation") {
     val testStr = """"this is a test!? yes? it is sir.""""
-    val replaced = JapaneseUtils.Punctuation.replacePunctuation(testStr)
+    val replaced = Punctuation.replacePunctuation(testStr)
     assertEquals(replaced, "\"this is a test！？ yes？ it is sir。\"")
   }
 
   test("wrap in Japanese quotes") {
     assertEquals(
-      JapaneseUtils.Punctuation.wrapInSingleQuotes("wrap me in single quotes"),
+      Punctuation.wrapInSingleQuotes("wrap me in single quotes"),
       "「wrap me in single quotes」"
     )
 
     assertEquals(
-      JapaneseUtils.Punctuation.wrapInDoubleQuotes("wrap me in double quotes"),
+      Punctuation.wrapInDoubleQuotes("wrap me in double quotes"),
       "『wrap me in double quotes』"
     )
   }

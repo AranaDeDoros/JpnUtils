@@ -30,11 +30,11 @@ object jpnImplicits {
     }
 
     def wrapInSingleQuotes: String = {
-      JapaneseUtils.Punctuation.wrapInSingleQuotes(s)
+      Punctuation.wrapInSingleQuotes(s)
     }
 
     def wrapInDoubleQuotes: String = {
-      JapaneseUtils.Punctuation.wrapInDoubleQuotes(s)
+      Punctuation.wrapInDoubleQuotes(s)
     }
   }
 
@@ -130,28 +130,29 @@ object JapaneseUtils {
     KanaDiacritics.hasHandakuten(str)
   }
 
-  /**
-   * for handling simple punctuation
-   */
-  object Punctuation {
+}
 
-    def replacePunctuation(str: String): String = {
-      str
-        .replace(",", "、")
-        .replace(".", "。")
-        .replace("?", "？")
-        .replace("!", "！")
-        .replace("(", "（")
-        .replace(")", "）")
+/**
+ * for handling simple punctuation
+ */
+object Punctuation {
 
-    }
-
-    val wrapInSingleQuotes: String => String = (s: String) =>
-      s.mkString("「", "", "」")
-    val wrapInDoubleQuotes: String => String = (s: String) =>
-      s.mkString("『", "", "』")
+  def replacePunctuation(str: String): String = {
+    str
+      .replace(",", "、")
+      .replace(".", "。")
+      .replace("?", "？")
+      .replace("!", "！")
+      .replace("(", "（")
+      .replace(")", "）")
 
   }
+
+  val wrapInSingleQuotes: String => String = (s: String) =>
+    s.mkString("「", "", "」")
+  val wrapInDoubleQuotes: String => String = (s: String) =>
+    s.mkString("『", "", "』")
+
 }
 
 /**
@@ -175,4 +176,59 @@ object KanaDiacritics {
     norm.exists(c => c == Dakuten || c == Handakuten)
   }
 
+}
+
+
+
+object HalfWidthConverter {
+
+  // fullwidth → halfwidth
+  private val kanaMap: Map[Char, String] = Map(
+    'ア' -> "ｱ", 'イ' -> "ｲ", 'ウ' -> "ｳ", 'エ' -> "ｴ", 'オ' -> "ｵ",
+    'カ' -> "ｶ", 'キ' -> "ｷ", 'ク' -> "ｸ", 'ケ' -> "ｹ", 'コ' -> "ｺ",
+    'サ' -> "ｻ", 'シ' -> "ｼ", 'ス' -> "ｽ", 'セ' -> "ｾ", 'ソ' -> "ｿ",
+    'タ' -> "ﾀ", 'チ' -> "ﾁ", 'ツ' -> "ﾂ", 'テ' -> "ﾃ", 'ト' -> "ﾄ",
+    'ナ' -> "ﾅ", 'ニ' -> "ﾆ", 'ヌ' -> "ﾇ", 'ネ' -> "ﾈ", 'ノ' -> "ﾉ",
+    'ハ' -> "ﾊ", 'ヒ' -> "ﾋ", 'フ' -> "ﾌ", 'ヘ' -> "ﾍ", 'ホ' -> "ﾎ",
+    'マ' -> "ﾏ", 'ミ' -> "ﾐ", 'ム' -> "ﾑ", 'メ' -> "ﾒ", 'モ' -> "ﾓ",
+    'ヤ' -> "ﾔ", 'ユ' -> "ﾕ", 'ヨ' -> "ﾖ",
+    'ラ' -> "ﾗ", 'リ' -> "ﾘ", 'ル' -> "ﾙ", 'レ' -> "ﾚ", 'ロ' -> "ﾛ",
+    'ワ' -> "ﾜ", 'ヲ' -> "ｦ", 'ン' -> "ﾝ",
+    'ァ' -> "ｧ", 'ィ' -> "ｨ", 'ゥ' -> "ｩ", 'ェ' -> "ｪ", 'ォ' -> "ｫ",
+    'ッ' -> "ｯ", 'ャ' -> "ｬ", 'ュ' -> "ｭ", 'ョ' -> "ｮ",
+
+    // dakuten
+    'ガ' -> "ｶﾞ", 'ギ' -> "ｷﾞ", 'グ' -> "ｸﾞ", 'ゲ' -> "ｹﾞ", 'ゴ' -> "ｺﾞ",
+    'ザ' -> "ｻﾞ", 'ジ' -> "ｼﾞ", 'ズ' -> "ｽﾞ", 'ゼ' -> "ｾﾞ", 'ゾ' -> "ｿﾞ",
+    'ダ' -> "ﾀﾞ", 'ヂ' -> "ﾁﾞ", 'ヅ' -> "ﾂﾞ", 'デ' -> "ﾃﾞ", 'ド' -> "ﾄﾞ",
+    'バ' -> "ﾊﾞ", 'ビ' -> "ﾋﾞ", 'ブ' -> "ﾌﾞ", 'ベ' -> "ﾍﾞ", 'ボ' -> "ﾎﾞ",
+
+    // handakuten
+    'パ' -> "ﾊﾟ", 'ピ' -> "ﾋﾟ", 'プ' -> "ﾌﾟ", 'ペ' -> "ﾍﾟ", 'ポ' -> "ﾎﾟ",
+
+    // Special marks
+    'ヴ' -> "ｳﾞ",
+    'ヵ' -> "ｶ",   // small ka
+    'ヶ' -> "ｹ",   // small ke
+    '・' -> "･",
+    'ー' -> "ｰ",
+    '「' -> "｢",
+    '」' -> "｣",
+    '、' -> "､",
+    '。' -> "｡"
+  )
+
+  def toHalfWidth(str: String): String =
+    str.flatMap { c =>
+      // ASCII full-width block FF01–FF5E
+      if (c >= '\uFF01' && c <= '\uFF5E')
+        ((c - 0xFEE0).toChar).toString
+
+      // Katakana map
+      else if (kanaMap.contains(c))
+        kanaMap(c)
+
+      else
+        (c).toString
+    }
 }
