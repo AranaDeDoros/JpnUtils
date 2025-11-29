@@ -49,11 +49,6 @@ object Usage extends App {
   val s = "カタカナ　ＡＢＣ１２３＆％"
   println(HalfWidthConverter.toHalfWidth(s))
 
-  "test".foreach{println}
-  ("test").flatMap{e => {
-    println(e)
-    s"$e"}
-  }
 
 
 }

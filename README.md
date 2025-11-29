@@ -40,4 +40,8 @@ A micro library of functions to work with japanese strings.
     println("俺はテストだぞ".hasDakuten)
     //true
     println("いっぱいに静かがっぽい".hasHandakuten)
+
+    //ｶﾀｶﾅ　ABC123&%
+    val s = "カタカナ　ＡＢＣ１２３＆％"
+    println(HalfWidthConverter.toHalfWidth(s))
 ```
