@@ -1,6 +1,6 @@
 # About
-
-A micro library of functions to work with japanese strings.
+<p align="center"><img height="500" alt="jpnutils" src="https://github.com/user-attachments/assets/f169c2c0-45b7-4b74-bdef-2649c527ab49" /></p>
+<p align="center">A micro library of functions to work with japanese strings.</p>
 
 ```scala
     //using the JapaneseUtils singleton
@@ -26,10 +26,10 @@ A micro library of functions to work with japanese strings.
 
     //miscellaneous methods
     val testStr = """"this is a test!? yes? it is sir.""""
-    val strWithReplacedPunctionation = JapaneseUtils
+    val strWithReplacedPunctuation = JapaneseUtils
                                        .Punctuation
                                        .replacePunctuation(testStr)
-    println(strWithReplacedPunctionation)         //"this is a test！？ yes？ it is sir。"
+    println(strWithReplacedPunctuation)         //"this is a test！？ yes？ it is sir。"
 
     //「wrap me in single quotes」 and 『wrap me in double quotes』 respectively
     println(JapaneseUtils.Punctuation.wrapInSingleQuotes("wrap me in single quotes"))
