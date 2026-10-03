@@ -45,10 +45,22 @@ jobs:
       - name: Generate Scaladoc
         run: sbt doc
 
+      - name: Find Scaladoc Directory
+        id: find-doc
+        run: |
+          # Finds the actual generated api directory regardless of exact Scala version
+          DOC_DIR=$(find target -type d -path "*/target/scala-*/api" | head -n 1)
+          if [ -z "$DOC_DIR" ]; then
+            echo "Error: Could not locate generated Scaladoc directory under target/"
+            exit 1
+          fi
+          echo "Found Scaladoc at: $DOC_DIR"
+          echo "path=$DOC_DIR" >> $GITHUB_OUTPUT
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/scala-*/api
+          path: ${{ steps.find-doc.outputs.path }}
 
   deploy:
     needs: build
