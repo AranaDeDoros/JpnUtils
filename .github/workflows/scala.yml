@@ -48,13 +48,13 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/scala-3/api
+          path: target/scala-*/api
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
-    if: startsWith(github.ref, 'refs/heads/')
+    if: github.ref == 'refs/heads/master'
 
     environment:
       name: github-pages
@@ -67,7 +67,7 @@ jobs:
 
   release:
     name: Build & Publish Release
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
     steps:
@@ -102,6 +102,6 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: target/scala-3/*.jar
+          files: target/scala-*/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
