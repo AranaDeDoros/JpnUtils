@@ -1,47 +1,66 @@
 # About
 
-A micro library of functions to work with japanese strings.
+A micro library of functions to work with japanese strings. Now for Scala 3.3 LTS.
 
 ```scala
-    //using the JapaneseUtils singleton
-    println(JapaneseUtils.containsHiragana("込める")) //true
-    println(JapaneseUtils.containsKatakana("淋しい")) //false
-    println(JapaneseUtils.containsKanji("淋しい"))    //true
+package main
 
-    println(JapaneseUtils.isHiragana('込'))         //false
-    println(JapaneseUtils.isKatakana('淋'))         //false
-    println(JapaneseUtils.isKanji('い'))            //false
+import scala.language.postfixOps
+import lib.{HalfWidthConverter, JapaneseUtils, Punctuation}
+import lib.Givens.{*, given}
+import lib.Script.*
 
-    //using implicits
+@main def run() : Unit =
+  //using the JapaneseUtils singleton
+  println(JapaneseUtils.containsHiragana("込める")) //true
+  println(JapaneseUtils.containsKatakana("淋しい")) //false
+  println(JapaneseUtils.containsKanji("淋しい"))    //true
 
-    //hasX methods, works on string
-    println("当てのない僕は".hasHiragana)             //true
-    println("満月".hasKanji)                         //true
-    println("オカエリナサイ".hasKanji)                 //false
+  println(JapaneseUtils.isHiragana('込')) //false
+  println(JapaneseUtils.isKatakana('淋')) //false
+  println(JapaneseUtils.isKanji('い'))    //false
 
-    //isX, works on char
-    println('そ'.isHiragana)                       //true
-    println('た'isKatakana)                        //false
-    println('林'.isKanji)                          //true
+  //using implicits
 
-    //miscellaneous methods
-    val testStr = """"this is a test!? yes? it is sir.""""
-    val strWithReplacedPunctionation = JapaneseUtils
-                                       .Punctuation
-                                       .replacePunctuation(testStr)
-    println(strWithReplacedPunctionation)         //"this is a test！？ yes？ it is sir。"
+  //hasX methods, works on string
+  println("当てのない僕は".hasHiragana) //true
+  println("満月".hasKanji)         //true
+  println("オカエリナサイ".hasKanji)    //false
 
-    //「wrap me in single quotes」 and 『wrap me in double quotes』 respectively
-    println(JapaneseUtils.Punctuation.wrapInSingleQuotes("wrap me in single quotes"))
-    println(JapaneseUtils.Punctuation.wrapInDoubleQuotes("wrap me in double quotes"))
+  //isX, works on char
+  println('そ'.isHiragana) //true
+  println('た' isKatakana) //false
+  println('林'.isKanji)    //true
 
-    //2025 update　KanaDiacritics
-    //true
-    println("俺はテストだぞ".hasDakuten)
-    //true
-    println("いっぱいに静かがっぽい".hasHandakuten)
+  //miscellaneous methods
+  val testStr = """"this is a test!? yes? it is sir.""""
+  val strWithReplacedPunctuation = Punctuation.replacePunctuation(testStr)
+  println(strWithReplacedPunctuation) //"this is a test！？ yes？ it is sir。"
 
-    //ｶﾀｶﾅ　ABC123&%
-    val s = "カタカナ　ＡＢＣ１２３＆％"
-    println(HalfWidthConverter.toHalfWidth(s))
+  //「wrap me in single quotes」 and 『wrap me in double quotes』
+  println(
+    Punctuation.wrapInSingleQuotes("wrap me in single quotes")
+  )
+  println(
+    Punctuation.wrapInDoubleQuotes("wrap me in double quotes")
+  )
+
+  //2025 update　KanaDiacritics
+  //true
+  println("俺はテストだぞ".hasDakuten)
+  //true
+  println("いっぱいに静かがっぽい".hasHandakuten)
+
+  val s = "カタカナ　ＡＢＣ１２３＆％"
+  println(HalfWidthConverter.toHalfWidth(s))
+
+  //2025 update script usage
+  val script = "日本語abcカナ"
+  println(script.containsOnly(Set(JpnScript.Kanji, JpnScript.Katakana)) ) // false
+  val summary = script.scriptSummary
+  println(summary.hiragana ) // 0
+  println(summary.katakana ) // 2
+  println(summary.kanji    ) // 3
+  println(summary.other    ) // 3
+
 ```

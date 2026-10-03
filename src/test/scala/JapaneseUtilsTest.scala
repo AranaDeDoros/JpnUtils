@@ -1,13 +1,14 @@
 
 import lib.{JapaneseUtils, Punctuation}
-import lib.jpnImplicits._
+import lib.Givens.{*, given}
 import munit.ScalaCheckSuite
 import org.scalacheck.Gen
 import org.scalacheck.Prop.forAll
 
 import scala.language.postfixOps
+import lib.Script.*
 
-class JapaneseUtilsTest extends ScalaCheckSuite {
+class JapaneseUtilsTest extends ScalaCheckSuite:
 
 
   test("containsX methods") {
@@ -58,7 +59,7 @@ class JapaneseUtilsTest extends ScalaCheckSuite {
   }
 
 
-  // Rangos Unicode relevantes
+  // relevant unicode ranges
   val hiraganaRange = '\u3041' to '\u3096'
   val katakanaRange = '\u30A1' to '\u30FA'
   val kanjiRange    = '\u4E00' to '\u9FAF'
@@ -128,4 +129,45 @@ class JapaneseUtilsTest extends ScalaCheckSuite {
         !s.hasKanji
     }
   }
-}
+
+  property("example script has the expected summary"){
+    val script = "日本語abcカナ"
+    val summary = script.scriptSummary
+
+    (summary.hiragana == 0) &&
+    (summary.katakana == 2) &&
+    (summary.kanji == 3) &&
+    (summary.other == 3)
+  }
+
+  property("example script is not only Kanji and Katakana"){
+    val script = "日本語abcカナ"
+    !script.containsOnly(Set(
+      JpnScript.Kanji,
+      JpnScript.Katakana
+    ))
+  }
+
+  property("example script is only Kanji, Katakana and Other"){
+    val script = "日本語abcカナ"
+
+    script.containsOnly(Set(
+      JpnScript.Kanji,
+      JpnScript.Katakana,
+      JpnScript.Other
+    ))
+  }
+
+  property("example script is not only Kanji"){
+    val script = "日本語abcカナ"
+    !script.containsOnly(Set(JpnScript.Kanji))
+  }
+
+  property("empty string has an empty summary"){
+    val summary = "".scriptSummary
+
+    (summary.hiragana == 0) &&
+    (summary.katakana == 0) &&
+    (summary.kanji == 0) &&
+    (summary.other == 0)
+  }

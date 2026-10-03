@@ -2,10 +2,10 @@ package main
 
 import scala.language.postfixOps
 import lib.{HalfWidthConverter, JapaneseUtils, Punctuation}
-import lib.jpnImplicits._
+import lib.Givens.{*, given}
+import lib.Script.*
 
-object Usage extends App {
-
+@main def run() : Unit =
   //using the JapaneseUtils singleton
   println(JapaneseUtils.containsHiragana("込める")) //true
   println(JapaneseUtils.containsKatakana("淋しい")) //false
@@ -49,6 +49,11 @@ object Usage extends App {
   val s = "カタカナ　ＡＢＣ１２３＆％"
   println(HalfWidthConverter.toHalfWidth(s))
 
-
-
-}
+  //2025 update script usage
+  val str = "日本語abcカナ"
+  println(str.containsOnly(Set(JpnScript.Kanji, JpnScript.Katakana)) ) // false
+  val summary = str.scriptSummary
+  println(summary.hiragana ) // 0
+  println(summary.katakana ) // 2
+  println(summary.kanji    ) // 3
+  println(summary.other    ) // 3

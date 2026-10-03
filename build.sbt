@@ -3,7 +3,7 @@ import sbt.Keys.libraryDependencies
 
 import scala.collection.immutable.Seq
 
-ThisBuild / scalaVersion     := "2.13.7"
+ThisBuild / scalaVersion     := "3.3.8"
 ThisBuild / version          := "1.0.0"
 ThisBuild / organization     := "com.aranadedoros"
 ThisBuild / organizationName := "AranaDeDoros"
