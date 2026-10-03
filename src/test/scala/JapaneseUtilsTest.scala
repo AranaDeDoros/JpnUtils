@@ -58,6 +58,13 @@ class JapaneseUtilsTest extends ScalaCheckSuite:
     assertEquals("いっぱいに静かがっぽい".hasHandakuten, true)
   }
 
+  test("IdsParser parseIterative and parseFast") {
+    val idsStr = "⿰⿱⿰日月⿱木林"
+    val parsedIterative = lib.IdsParser.parseIterative(idsStr)
+    val parsedFast = lib.IdsParser.parseFast(idsStr)
+    assertEquals(parsedIterative, parsedFast)
+  }
+
 
   // relevant unicode ranges
   val hiraganaRange = '\u3041' to '\u3096'
