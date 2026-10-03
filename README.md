@@ -71,19 +71,19 @@ import lib.Script.*
 
   IdsParser.parseIterative(idsInput) match
     case Some(tree) =>
-      println("--- Árbol Generado ---")
+      println("--- Generated tree ---")
       println(tree)
-      println("\n--- Representación Formateada ---")
+      println("\n--- Formatted Representation ---")
       println(formatTree(tree))
     case None =>
-      println("Error al parsear la secuencia IDS.")
+      println("Error while parsing IDS.")
 
   def formatTree(node: IdsNode, indent: String = "\t"): String =
     node match
       case IdsNode.Component(value) =>
-        s"${indent}Componente: $value\n"
+        s"${indent}Component: $value\n"
       case IdsNode.Operation(op, children) =>
-        val current = s"${indent}Operador: $op\n"
+        val current = s"${indent}Operator: $op\n"
         val formattedChildren = children
           .map(c => formatTree(c, indent + "  "))
           .mkString
