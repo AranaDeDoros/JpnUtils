@@ -1,6 +1,6 @@
 package lib
 
-/** **
+/**
   * Half-width converter for Japanese text
   */
 object HalfWidthConverter:

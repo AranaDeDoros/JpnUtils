@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
+  id-token: read
   pages: write
   contents: write
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest

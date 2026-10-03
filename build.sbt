@@ -4,14 +4,14 @@ import sbt.Keys.libraryDependencies
 import scala.collection.immutable.Seq
 
 ThisBuild / scalaVersion     := "3.3.8"
-ThisBuild / version          := "1.0.0"
+ThisBuild / version          := "2.0.0"
 ThisBuild / organization     := "com.aranadedoros"
 ThisBuild / organizationName := "AranaDeDoros"
 
-
 Compile / doc / scalacOptions ++= Seq(
-  "-skip-packages", "main"
+"-skip-packages:main"
 )
+
 Compile / packageBin / mappings := {
   val original = (Compile / packageBin / mappings).value
   original.filterNot { case (_, pathInJar) =>

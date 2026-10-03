@@ -2,7 +2,7 @@ package lib
 
 import java.text.Normalizer
 
-/** Object to detect dakuten and handakuten **/
+/** Object to detect dakuten and handakuten */
 object KanaDiacritics:
   private val Dakuten: Char    = '\u3099'
   private val Handakuten: Char = '\u309A'

@@ -2,7 +2,7 @@ package lib
 
 import lib.Givens.{*, given}
 
-/** Script analysis **/
+/** Script analysis */
 object Script:
 
     enum JpnScript:
