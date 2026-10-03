@@ -1,6 +1,11 @@
 # About
+<<<<<<< HEAD
 
 A micro library of functions to work with japanese strings. Now for Scala 3.3 LTS.
+=======
+<p align="center"><img height="500" alt="jpnutils" src="https://github.com/user-attachments/assets/f169c2c0-45b7-4b74-bdef-2649c527ab49" /></p>
+<p align="center">A micro library of functions to work with japanese strings.</p>
+>>>>>>> 2b40acb57d2ccc62980900d7a084a7fd8ad6c4f0
 
 ```scala
 package main
