@@ -60,6 +60,7 @@ import lib.IdsParser
   println(summary.kanji)    // 3
   println(summary.other)    // 3
 
+  // ids parser usage
   val idsInput = "⿰言⿱五口"
 
   IdsParser.parseIterative(idsInput) match

@@ -65,4 +65,29 @@ import lib.Script.*
   println(summary.kanji    ) // 3
   println(summary.other    ) // 3
 
+
+  // ids parser usage
+  val idsInput = "⿰言⿱五口"
+
+  IdsParser.parseIterative(idsInput) match
+    case Some(tree) =>
+      println("--- Árbol Generado ---")
+      println(tree)
+      println("\n--- Representación Formateada ---")
+      println(formatTree(tree))
+    case None =>
+      println("Error al parsear la secuencia IDS.")
+
+  def formatTree(node: IdsNode, indent: String = "\t"): String =
+    node match
+      case IdsNode.Component(value) =>
+        s"${indent}Componente: $value\n"
+      case IdsNode.Operation(op, children) =>
+        val current = s"${indent}Operador: $op\n"
+        val formattedChildren = children
+          .map(c => formatTree(c, indent + "  "))
+          .mkString
+        current + formattedChildren
+
+
 ```
