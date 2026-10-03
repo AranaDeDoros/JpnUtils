@@ -2,6 +2,8 @@
 
 A micro library of functions to work with japanese strings. Now for Scala 3.3 LTS.
 
+<p align="center"><img height="500" alt="jpnutils" src="https://github.com/user-attachments/assets/f169c2c0-45b7-4b74-bdef-2649c527ab49" /></p>
+
 ```scala
 package main
 
