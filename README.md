@@ -54,7 +54,7 @@ import lib.Script.*
   val s = "カタカナ　ＡＢＣ１２３＆％"
   println(HalfWidthConverter.toHalfWidth(s))
 
-  //2025 update script usage
+  //2026 update script usage
   val script = "日本語abcカナ"
   println(script.containsOnly(Set(JpnScript.Kanji, JpnScript.Katakana)) ) // false
   val summary = script.scriptSummary
