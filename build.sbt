@@ -9,7 +9,7 @@ ThisBuild / organization     := "com.aranadedoros"
 ThisBuild / organizationName := "AranaDeDoros"
 
 Compile / doc / scalacOptions ++= Seq(
-  "-skip-by-regex:main.*"
+  "-skip-packages:main"
 )
 
 Compile / packageBin / mappings := {
